@@ -24,21 +24,20 @@ def home():
 
 @app.route("/start")
 def start():
-    service = chrome_service.Service(f'{HOME}/chromedriver')
+    service = chrome_service.Service('/usr/bin/chromedriver/chromedriver')
     service.start()
     options =  webdriver.ChromeOptions()
-    options.binary_location=f'{HOME}/chrome-linux64/chrome'
+    options.binary_location='usr/bin/chrome/chrome'
 
     #options.add_argument('--disable-dev-shm-usage')
     #options.add_argument('--no-sandbox')
 
     driver = webdriver.Remote(service.service_url, options=options)
 
-    driver.get('http://www.google.com')
     fetch_redfin(driver)
     database=Conn()
     data = get_data_table(database)
-    return render_template('display.html', data=[])
+    return render_template('display.html', data=data)
 
 @app.route("/update")
 def update():
@@ -176,4 +175,4 @@ def get_data_table(database):
     return data
 
 if __name__ == '__main__':
-    serve(app, host='0.0.0.0', port=8000)
+    serve(app, host='0.0.0.0', port=5000)
